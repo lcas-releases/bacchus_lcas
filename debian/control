@@ -1,0 +1,12 @@
+Source: ros-melodic-bacchus-gazebo
+Section: misc
+Priority: optional
+Maintainer: mhanheide <marc@hanheide.net>
+Build-Depends: debhelper (>= 9.0.0), ros-melodic-catkin, ros-melodic-kinect2-description, ros-melodic-nav-msgs, ros-melodic-roscpp, ros-melodic-rospy, ros-melodic-sensor-msgs, ros-melodic-std-msgs, ros-melodic-thorvald-gazebo-plugins, ros-melodic-thorvald-twist-mux, ros-melodic-velodyne-description, ros-melodic-velodyne-gazebo-plugins
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-melodic-bacchus-gazebo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-melodic-kinect2-description, ros-melodic-map-server, ros-melodic-nav-msgs, ros-melodic-roscpp, ros-melodic-rospy, ros-melodic-sensor-msgs, ros-melodic-std-msgs, ros-melodic-thorvald-base, ros-melodic-thorvald-description, ros-melodic-thorvald-gazebo-plugins, ros-melodic-thorvald-twist-mux, ros-melodic-velodyne-description, ros-melodic-velodyne-gazebo-plugins
+Description: The bacchus_gazebo package
