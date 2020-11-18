@@ -1,0 +1,36 @@
+ros-melodic-bacchus-gazebo (0.1.0-1bionic) bionic; urgency=high
+
+  * Merge pull request #5 <https://github.com/LCAS/bacchus_lcas/issues/5> from LCAS/vine_stages
+    Vine stages
+  * deleted vine_t0 model
+  * changed the testme.test file to pass the test with a new launch file
+  * Merge branch 'master' into vine_stages
+  * fix download directory + remove vine_t0.dae
+  * Auto download vineyard modes (from nextcloud) upon building the workspace (catkin_make)
+  * Merge pull request #4 <https://github.com/LCAS/bacchus_lcas/issues/4> from LCAS/change_sensors
+    added the new kinect cameras configuration
+  * added the new kinect cameras configuration
+  * added config file rviz
+  * Update vineyard_demo.launch
+    added rviz
+  * Merge pull request #3 <https://github.com/LCAS/bacchus_lcas/issues/3> from LCAS/new_sim_sergi
+    adding move base and main launch file
+  * adding move base and main launch file
+  * Add vineyard simulation at stage 0
+  * Contributors: Ibrahim Hroob, Sergi Molina, sergimolina
+
+ -- mhanheide <marc@hanheide.net>  Wed, 18 Nov 2020 00:00:00 -0000
+
+ros-melodic-bacchus-gazebo (0.0.1-1bionic) bionic; urgency=high
+
+  * renamed file
+  * changed to cmp9767m base
+  * removed outdated deps
+  * removed outdated deps
+  * version
+  * initial commit
+  * Contributors: Marc Hanheide
+
+ -- mhanheide <marc@hanheide.net>  Tue, 07 Jul 2020 23:00:00 -0000
+
+
