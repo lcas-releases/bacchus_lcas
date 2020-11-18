@@ -2,6 +2,11 @@
 Changelog for package bacchus_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.2 (2020-11-18)
+------------------
+* added exec_depend for launch files
+* Contributors: Marc Hanheide
+
 0.2.1 (2020-11-18)
 ------------------
 * fix deps
