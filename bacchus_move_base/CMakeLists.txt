@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bacchus_gazebo)
+project(bacchus_move_base)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,24 +8,13 @@ project(bacchus_gazebo)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  nav_msgs
-  rospy
-  sensor_msgs
-  std_msgs
-  thorvald_twist_mux
-  velodyne_description
-  #velodyne_gazebo_plugins
-  kinect2_description
+  dwa_local_planner
+  #eband_local_planner
+  move_base
+  robot_pose_publisher
+  teb_local_planner
+  tf
 )
-
-find_package (gazebo REQUIRED)
-
-
-if(CMAKE_HOST_UNIX)
-  catkin_add_env_hooks(90-bacchus_gazebo SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks)
-else()
-  message(FATAL_ERROR "Only UNIX builds supported.")
-endif()
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -84,7 +73,7 @@ endif()
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   nav_msgs#   sensor_msgs#   std_msgs
+#   std_msgs
 # )
 
 ################################################
@@ -116,13 +105,12 @@ endif()
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-
 catkin_package(
-  INCLUDE_DIRS ${GAZEBO_INCLUDE_DIRS}
-  LIBRARIES  ActorCollisionsPlugin
-  CATKIN_DEPENDS roscpp #gazebo_plugins gazebo_ros
+#  INCLUDE_DIRS include
+#  LIBRARIES rasberry_move_base
+#  CATKIN_DEPENDS move_base rospy std_msgs
+#  DEPENDS system_lib
 )
-
 
 ###########
 ## Build ##
@@ -130,20 +118,14 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include)
-include_directories( ${catkin_INCLUDE_DIRS} 
-                     ${Boost_INCLUDE_DIR} 
-                     ${GAZEBO_INCLUDE_DIRS}
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
 )
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
-
-
-link_directories(${GAZEBO_LIBRARY_DIRS})
-add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/bacchus_gazebo.cpp
+#   src/${PROJECT_NAME}/rasberry_move_base.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -154,7 +136,7 @@ add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/bacchus_gazebo_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/rasberry_move_base_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -177,11 +159,6 @@ add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-install(PROGRAMS
-  tests/simple_test.py
-  scripts/sprayer.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
@@ -191,11 +168,11 @@ install(PROGRAMS
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS ActorCollisionsPlugin
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
 ## Mark cpp header files for installation
 # install(DIRECTORY include/${PROJECT_NAME}/
@@ -211,9 +188,9 @@ install(TARGETS ActorCollisionsPlugin
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
-foreach (dir tests config launch models urdf worlds maps rviz)
+foreach (dir launch config )
     install(DIRECTORY ${dir}/
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir}/)
 endforeach(dir)
 
 #############
@@ -221,48 +198,10 @@ endforeach(dir)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_bacchus_gazebo.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_rasberry_move_base.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-
-if(CATKIN_ENABLE_TESTING)
-  find_package(rostest REQUIRED)
-  add_rostest(tests/testme.test)
-endif()
-
-set(TIMEOUT 10)
-set(FILE_NAME vine_t.zip)
-set(DOWNLOAD_DIR ../src/bacchus_lcas/bacchus_gazebo/models)
-set(URL https://lcas.lincoln.ac.uk/nextcloud/index.php/s/XG8yLcQPfXe5kk8/download)
-
-set(file ${DOWNLOAD_DIR}/${FILE_NAME})
-message(STATUS "file: ${file}")
-
-if(NOT EXISTS ${file})
-	message(STATUS "downloading ...
-	    src='${URL}'
-	    dst='${file}'
-	    timeout= ${TIMEOUT} seconds")
-
-	file(DOWNLOAD
-		${URL}
-		${file}
-		SHOW_PROGRESS
-		STATUS st
-		INACTIVITY_TIMEOUT ${TIMEOUT}
-		LOG log
-		)
-
-	list(GET status 0 status_code)
-	list(GET status 1 status_string)
-
-	message( STATUS ${status_code})
-	execute_process(COMMAND bash -c "unzip ${file} -d ${DOWNLOAD_DIR}")
-endif()
-
-
