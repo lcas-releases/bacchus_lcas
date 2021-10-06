@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   velodyne_description
   #velodyne_gazebo_plugins
   kinect2_description
+  fake_localization
 )
 
 find_package (gazebo REQUIRED)
@@ -119,7 +120,7 @@ endif()
 
 catkin_package(
   INCLUDE_DIRS ${GAZEBO_INCLUDE_DIRS}
-  LIBRARIES  ActorCollisionsPlugin
+  #LIBRARIES  ActorCollisionsPlugin
   CATKIN_DEPENDS roscpp #gazebo_plugins gazebo_ros
 )
 
@@ -138,8 +139,8 @@ include_directories( ${catkin_INCLUDE_DIRS}
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 
-link_directories(${GAZEBO_LIBRARY_DIRS})
-add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
+#link_directories(${GAZEBO_LIBRARY_DIRS})
+#add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -179,7 +180,7 @@ add_library(ActorCollisionsPlugin src/ActorCollisionsPlugin.cc)
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 install(PROGRAMS
   tests/simple_test.py
-  scripts/sprayer.py
+#  scripts/sprayer.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -191,11 +192,11 @@ install(PROGRAMS
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS ActorCollisionsPlugin
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+#install(TARGETS ActorCollisionsPlugin
+#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
 ## Mark cpp header files for installation
 # install(DIRECTORY include/${PROJECT_NAME}/
@@ -235,9 +236,14 @@ if(CATKIN_ENABLE_TESTING)
   add_rostest(tests/testme.test)
 endif()
 
-set(MODELS_ZIPFILE vine_t.zip)
+set(MODELS_ZIPFILE '3D models.zip')
+set(VINEYARD_MODELS_ZIPFILE vine_t.zip)
+set(HEIGHTMAP_MODELS_ZIPFILE heightmap.zip)
+set(RISEHOLME_MODELS_ZIPFILE riseholme.zip)
+set(GROUND_MODEL_ZIPFILE_IH riseholme_ih.zip) 
+
 set(MODELS_DEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/models)
-set(MODELS_DOWNLOAD_URL https://lcas.lincoln.ac.uk/nextcloud/index.php/s/XG8yLcQPfXe5kk8/download)
+set(MODELS_DOWNLOAD_URL https://lcas.lincoln.ac.uk/nextcloud/index.php/s/7zi4gfE7c2naE7A/download)
 
 add_custom_command(OUTPUT ${MODELS_ZIPFILE}
   COMMAND curl --progress-bar -o "${MODELS_ZIPFILE}" "${MODELS_DOWNLOAD_URL}"
@@ -251,6 +257,11 @@ add_custom_command(
   COMMAND unzip -q -o -d "${MODELS_DEST_DIR}" "${MODELS_ZIPFILE}"
   COMMAND touch .models-extracted
   COMMENT "extracting additional models"
+  COMMAND unzip -q -o -d "${MODELS_DEST_DIR}" "${MODELS_DEST_DIR}/3D\ models/${VINEYARD_MODELS_ZIPFILE}"
+  COMMAND unzip -q -o -d "${MODELS_DEST_DIR}" "${MODELS_DEST_DIR}/3D\ models/${HEIGHTMAP_MODELS_ZIPFILE}"
+  COMMAND unzip -q -o -d "${MODELS_DEST_DIR}" "${MODELS_DEST_DIR}/3D\ models/${GROUND_MODEL_ZIPFILE_IH}"
+  COMMAND unzip -q -o -d "${MODELS_DEST_DIR}" "${MODELS_DEST_DIR}/3D\ models/${RISEHOLME_MODELS_ZIPFILE}"
+  COMMAND rm -r "${MODELS_DEST_DIR}/3D\ models"
   VERBATIM
 )
 
