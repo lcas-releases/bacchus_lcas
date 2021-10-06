@@ -1,3 +1,28 @@
+## bacchus_teaching (melodic) - 0.3.0-1
+
+The packages in the `bacchus_teaching` repository were released into the `melodic` distro by running `/home/marchanheide/.local/bin/bloom-release -t melodic -r melodic bacchus_teaching` on `Wed, 06 Oct 2021 09:37:52 -0000`
+
+These packages were released:
+- `bacchus_gazebo`
+- `bacchus_move_base`
+
+Version of package(s) in repository `bacchus_teaching`:
+
+- upstream repository: https://github.com/LCAS/bacchus_lcas.git
+- release repository: https://github.com/lcas-releases/bacchus_lcas.git
+- rosdistro version: `0.2.2-1`
+- old version: `0.2.2-1`
+- new version: `0.3.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.21.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## bacchus_lcas (melodic) - 0.2.2-1
 
 The packages in the `bacchus_lcas` repository were released into the `melodic` distro by running `/usr/bin/bloom-release -y --no-web -t melodic -r melodic bacchus_lcas` on `Wed, 18 Nov 2020 15:38:16 -0000`
