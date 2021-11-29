@@ -1,1 +1,1 @@
-{"base": "9bc101b", "parent": "debian/melodic/bacchus_move_base", "previous": "6993112", "trim": "", "trimbase": ""}
+{"trim": "", "base": "08190a1", "trimbase": "", "parent": "debian/melodic/bacchus_move_base", "previous": "f3457ef"}
